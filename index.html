@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --offwhite: #f7f5f0;
+      --offwhite2: #ede9e1;
+      --cream: #e8e2d5;
+      --text-dark: #1a1814;
+      --text-mid: #4a453d;
+      --text-light: #8a8278;
+      --accent: #c8602a;
+      --accent2: #3d6b5e;
+      --card-bg: #faf8f4;
+      --border: #ddd8ce;
+      --shadow: 0 4px 32px rgba(26,24,20,0.07);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--offwhite);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.2rem 4rem;
+      background: rgba(247,245,240,0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: var(--shadow); }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--text-dark); letter-spacing: -0.5px;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+    .nav-links a {
+      font-size: .92rem; font-weight: 500;
+      color: var(--text-mid); text-decoration: none;
+      position: relative; letter-spacing: .02em;
+      transition: color .25s;
+    }
+    .nav-links a::after {
+      content:''; position: absolute; bottom:-3px; left:0; right:0;
+      height: 1.5px; background: var(--accent);
+      transform: scaleX(0); transition: transform .25s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ── SECTIONS ── */
+    section { min-height: 100vh; padding: 7rem 4rem 4rem; }
+
+    /* ── HOME ── */
+    #home {
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+    }
+    .home-bg-shape {
+      position: absolute; right: -120px; top: 50%; transform: translateY(-50%);
+      width: 550px; height: 550px; border-radius: 50%;
+      background: radial-gradient(circle, var(--cream) 0%, transparent 70%);
+      opacity: .7; pointer-events: none;
+    }
+    .home-tag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .82rem; font-weight: 500; color: var(--accent);
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: 1.2rem;
+      opacity: 0; animation: fadeUp .6s .2s forwards;
+    }
+    .home-tag::before {
+      content:''; display: inline-block; width: 28px; height: 1.5px;
+      background: var(--accent);
+    }
+    .home-hello {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 700; line-height: 1.1;
+      color: var(--text-dark); letter-spacing: -2px;
+      opacity: 0; animation: fadeUp .7s .35s forwards;
+    }
+    .home-hello em { color: var(--accent); font-style: normal; }
+    .home-sub {
+      margin-top: 1.4rem; max-width: 480px;
+      font-size: 1.08rem; color: var(--text-mid); line-height: 1.7;
+      opacity: 0; animation: fadeUp .7s .5s forwards;
+    }
+    .home-actions {
+      margin-top: 2.4rem; display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0; animation: fadeUp .7s .65s forwards;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .55rem;
+      padding: .85rem 2rem; border-radius: 50px;
+      background: var(--accent); color: #fff;
+      font-size: .95rem; font-weight: 500;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: background .25s, transform .2s, box-shadow .25s;
+      box-shadow: 0 4px 18px rgba(200,96,42,.25);
+    }
+    .btn-primary:hover { background: #b0521f; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(200,96,42,.32); }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: .55rem;
+      padding: .85rem 2rem; border-radius: 50px;
+      background: transparent; color: var(--text-dark);
+      font-size: .95rem; font-weight: 500;
+      text-decoration: none; border: 1.5px solid var(--border); cursor: pointer;
+      transition: border-color .25s, color .25s, transform .2s;
+    }
+    .btn-secondary:hover { border-color: var(--text-dark); transform: translateY(-2px); }
+    .home-scroll {
+      position: absolute; bottom: 2.5rem; left: 4rem;
+      display: flex; align-items: center; gap: .7rem;
+      font-size: .78rem; color: var(--text-light); letter-spacing: .06em;
+      opacity: 0; animation: fadeIn 1s 1.2s forwards;
+    }
+    .scroll-line {
+      width: 40px; height: 1px; background: var(--border);
+      animation: scrollPulse 2s infinite;
+    }
+    @keyframes scrollPulse {
+      0%,100%{width:40px} 50%{width:60px}
+    }
+
+    /* ── ABOUT ── */
+    #about {
+      display: flex; align-items: center; gap: 5rem;
+      background: var(--offwhite2);
+    }
+    .about-img-wrap {
+      flex-shrink: 0; width: 320px; height: 380px; position: relative;
+    }
+    .about-img-placeholder {
+      width: 100%; height: 100%; border-radius: 18px;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--border) 100%);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: .6rem; color: var(--text-light); font-size: .9rem;
+    }
+    .about-img-placeholder svg { opacity: .4; }
+    .about-deco {
+      position: absolute; bottom: -18px; right: -18px;
+      width: 120px; height: 120px; border-radius: 14px;
+      border: 2.5px solid var(--accent); z-index: -1;
+    }
+    .about-content { flex: 1; }
+    .section-tag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .8rem; font-weight: 500; color: var(--accent);
+      letter-spacing: .08em; text-transform: uppercase; margin-bottom: .9rem;
+    }
+    .section-tag::before {
+      content:''; display: inline-block; width: 22px; height: 1.5px; background: var(--accent);
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 700; line-height: 1.2;
+      letter-spacing: -1px; margin-bottom: 1.2rem;
+    }
+    .about-text { color: var(--text-mid); line-height: 1.8; font-size: 1rem; margin-bottom: 1rem; }
+    .about-stats {
+      display: flex; gap: 2.5rem; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700; color: var(--accent);
+    }
+    .stat-label { font-size: .8rem; color: var(--text-light); margin-top: .2rem; }
+
+    /* ── SKILLS ── */
+    #skills { background: var(--offwhite); }
+    .skills-intro { max-width: 520px; margin-bottom: 3rem; }
+    .skills-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.4rem;
+    }
+    .skill-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 18px; padding: 2rem 1.8rem;
+      transition: transform .3s, box-shadow .3s, border-color .3s;
+      cursor: default;
+    }
+    .skill-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+      border-color: var(--accent);
+    }
+    .skill-icon {
+      width: 46px; height: 46px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.1rem; font-size: 1.3rem;
+    }
+    .skill-icon.fe { background: rgba(200,96,42,.1); }
+    .skill-icon.be { background: rgba(61,107,94,.1); }
+    .skill-icon.ui { background: rgba(141,110,99,.1); }
+    .skill-icon.to { background: rgba(74,69,61,.1); }
+    .skill-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; font-weight: 600; margin-bottom: .9rem;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .tag {
+      padding: .3rem .8rem; border-radius: 50px;
+      font-size: .78rem; font-weight: 500; border: 1px solid var(--border);
+      color: var(--text-mid); background: var(--offwhite);
+      transition: background .2s, border-color .2s, color .2s;
+    }
+    .skill-card:hover .tag { border-color: var(--cream); background: var(--cream); }
+
+    /* ── PROJECTS ── */
+    #projects { background: var(--offwhite2); }
+    .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 1.8rem; margin-top: 2.5rem; }
+
+    /* Coursera-style card */
+    .project-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 16px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(26,24,20,.05);
+      transition: transform .35s cubic-bezier(.22,.68,0,1.2), box-shadow .35s;
+      cursor: pointer;
+    }
+    .project-card:hover { transform: translateY(-8px); box-shadow: 0 18px 48px rgba(26,24,20,.12); }
+    .card-thumb {
+      width: 100%; height: 190px; position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #2d2926 0%, #4a3d33 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .card-thumb-visual {
+      display: flex; gap: 6px; align-items: flex-end; padding-bottom: 10px;
+    }
+    .bar {
+      width: 22px; border-radius: 3px 3px 0 0;
+      background: var(--accent); opacity: .85;
+      transition: height .6s ease;
+    }
+    .bar:nth-child(2){ background: #e8803a; }
+    .bar:nth-child(3){ background: #f0a060; }
+    .bar:nth-child(4){ background: var(--accent); }
+    .bar:nth-child(5){ background: #e8803a; }
+    .bar:nth-child(6){ background: #f0a060; }
+    .bar:nth-child(7){ background: var(--accent); }
+    .card-thumb-label {
+      position: absolute; bottom: 10px; right: 14px;
+      font-size: .72rem; color: rgba(255,255,255,.5); letter-spacing: .05em;
+    }
+    .card-provider {
+      display: flex; align-items: center; gap: .5rem;
+      padding: 1.1rem 1.4rem .3rem;
+    }
+    .provider-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); }
+    .provider-name { font-size: .78rem; color: var(--text-light); font-weight: 500; }
+    .card-body { padding: .4rem 1.4rem 1.4rem; }
+    .card-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 600; line-height: 1.3;
+      margin-bottom: .5rem; color: var(--text-dark);
+    }
+    .card-desc { font-size: .87rem; color: var(--text-mid); line-height: 1.6; margin-bottom: 1rem; }
+    .card-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .card-rating { display: flex; align-items: center; gap: .3rem; font-size: .82rem; }
+    .stars { color: #d4a029; font-size: .9rem; }
+    .rating-num { font-weight: 600; color: var(--text-dark); }
+    .rating-count { color: var(--text-light); }
+    .card-level {
+      font-size: .75rem; padding: .25rem .7rem; border-radius: 50px;
+      background: rgba(61,107,94,.1); color: var(--accent2); font-weight: 500;
+    }
+    .card-footer {
+      padding: .9rem 1.4rem; border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-skills-label { font-size: .78rem; color: var(--text-light); }
+    .card-link {
+      font-size: .82rem; font-weight: 500; color: var(--accent);
+      text-decoration: none; display: flex; align-items: center; gap: .3rem;
+      transition: gap .2s;
+    }
+    .card-link:hover { gap: .6rem; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--offwhite); }
+    .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .contact-info { }
+    .contact-detail { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.8rem; }
+    .contact-icon {
+      width: 42px; height: 42px; border-radius: 11px;
+      background: var(--cream); display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 1.1rem;
+    }
+    .contact-detail h4 { font-size: .8rem; color: var(--text-light); margin-bottom: .2rem; letter-spacing: .04em; }
+    .contact-detail p { font-size: .95rem; color: var(--text-dark); font-weight: 500; }
+    .contact-form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-group label { font-size: .8rem; color: var(--text-mid); font-weight: 500; letter-spacing: .03em; }
+    .form-group input,
+    .form-group textarea {
+      padding: .85rem 1.1rem; border-radius: 11px;
+      border: 1.5px solid var(--border); background: var(--card-bg);
+      font-family: 'DM Sans', sans-serif; font-size: .93rem;
+      color: var(--text-dark); outline: none; resize: vertical;
+      transition: border-color .25s, box-shadow .25s;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(200,96,42,.1);
+    }
+
+    /* ── RESUME ── */
+    #resume {
+      background: var(--offwhite2); min-height: auto; padding: 5rem 4rem;
+      text-align: center;
+    }
+    .resume-wrap { max-width: 600px; margin: 0 auto; }
+    .resume-wrap p { color: var(--text-mid); line-height: 1.8; margin-bottom: 2rem; }
+    .resume-card {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 18px; padding: 2.5rem 2rem; margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+    .resume-card .section-title { font-size: 1.6rem; margin-bottom: .5rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 2.5rem 4rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: .85rem; color: var(--text-light); flex-wrap: wrap; gap: 1rem;
+    }
+    .social-links { display: flex; gap: 1.2rem; }
+    .social-links a {
+      color: var(--text-light); text-decoration: none;
+      transition: color .2s;
+    }
+    .social-links a:hover { color: var(--accent); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(28px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity:0; } to { opacity:1; }
+    }
+    .reveal {
+      opacity: 0; transform: translateY(32px);
+      transition: opacity .7s cubic-bezier(.22,.68,0,1.2), transform .7s cubic-bezier(.22,.68,0,1.2);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .1s; }
+    .reveal-delay-2 { transition-delay: .2s; }
+    .reveal-delay-3 { transition-delay: .3s; }
+    .reveal-delay-4 { transition-delay: .4s; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 1rem 1.8rem; }
+      section { padding: 6rem 1.8rem 3rem; }
+      #about { flex-direction: column; gap: 2.5rem; }
+      .about-img-wrap { width: 100%; height: 240px; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      footer { flex-direction: column; text-align: center; padding: 2rem 1.8rem; }
+      .home-scroll { display: none; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { gap: 1.2rem; }
+      .nav-links a { font-size: .82rem; }
+      #resume { padding: 4rem 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Pooja<span> Karkutla</span></div>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#resume">Resume</a></li>
+  </ul>
+</nav>
+
+<!-- HOME -->
+<section id="home">
+  <div class="home-bg-shape"></div>
+  <div class="home-tag">Available for work</div>
+  <h1 class="home-hello">Hello, I'm<br><em>Pooja Karkutla</em></h1>
+  <p class="home-sub">
+   Driven IT student exploring technology, building innovative projects, actively working with AI, developing AI-powered solutions, and always ready to learn, create, and take on new challenges.
+  </p>
+  <div class="home-actions">
+    <a href="#projects" class="btn-primary">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      View My Work
+    </a>
+    <a href="#contact" class="btn-secondary">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Let's Talk
+    </a>
+  </div>
+  <div class="home-scroll">
+    <div class="scroll-line"></div>
+    Scroll to explore
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  
+    <div class="about-deco"></div>
+  </div>
+  <div class="about-content">
+    <div class="section-tag reveal">About Me</div>
+    <h2 class="section-title reveal reveal-delay-1">Turning ideas<br>into intelligent solutions</h2>
+    <p class="about-text reveal reveal-delay-2">
+      I am a technology enthusiast and developer focused on building impactful and innovative digital experiences. Passionate about Artificial Intelligence and software development, I enjoy creating AI-powered projects that solve real-world problems while continuously learning and exploring emerging technologies. I believe in combining creativity with technology to build solutions that are both meaningful and efficient.
+    </p>
+    <p class="about-text reveal reveal-delay-3">
+      When I'm not coding, you'll find me exploring design trends, contributing to open‑source, or sipping coffee while reading about algorithms.
+    </p>
+    <div class="about-stats reveal reveal-delay-4">
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="skills-intro">
+    <div class="section-tag reveal">My Skills</div>
+    <h2 class="section-title reveal reveal-delay-1">What I bring<br>to the table</h2>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <div class="skill-icon fe">🖥️</div>
+      <h3>Frontend</h3>
+      <div class="skill-tags">
+        <span class="tag">HTML5</span>
+        <span class="tag">CSS3</span>
+        <span class="tag">JavaScript</span>
+        </div>
+    </div>
+    <div class="skill-card reveal reveal-delay-1">
+      <div class="skill-icon be">⚙️</div>
+      <h3>Backend</h3>
+      <div class="skill-tags">
+        <span class="tag">Node.js</span>
+        <span class="tag">Express</span>
+        <span class="tag">MongoDB</span>
+        </div>
+    </div>
+    <div class="skill-card reveal reveal-delay-2">
+      <div class="skill-icon ui">🎨</div>
+      <h3>UI / UX</h3>
+      <div class="skill-tags">
+        <span class="tag">Figma</span>
+       </div>
+    </div>
+    <div class="skill-card reveal reveal-delay-3">
+      <div class="skill-icon to">🛠️</div>
+      <h3>Tools</h3>
+      <div class="skill-tags">
+        <span class="tag">Git</span>
+        <span class="tag">GitHub</span>
+        <span class="tag">VS Code</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-tag reveal">Projects</div>
+  <h2 class="section-title reveal reveal-delay-1">Things I've built</h2>
+  <div class="projects-grid">
+    <!-- Sorting Visualiser Card (Coursera-style) -->
+    <div class="project-card reveal reveal-delay-2" id="sorting-card">
+      <div class="card-thumb">
+        <div class="card-thumb-visual" id="bars-wrap">
+          <div class="bar" style="height:60px"></div>
+          <div class="bar" style="height:110px"></div>
+          <div class="bar" style="height:40px"></div>
+          <div class="bar" style="height:90px"></div>
+          <div class="bar" style="height:70px"></div>
+          <div class="bar" style="height:130px"></div>
+          <div class="bar" style="height:50px"></div>
+        </div>
+        <span class="card-thumb-label">SortViz</span>
+      </div>
+      <div class="card-provider">
+        <div class="provider-dot"></div>
+        <span class="provider-name">Personal Project</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">Sorting Algorithm Visualiser</h3>
+        <p class="card-desc">
+          An interactive visual tool that animates popular sorting algorithms — Bubble, Merge, Quick, and Insertion Sort — helping you understand how they work step by step.
+        </p>
+        <div class="card-meta">
+          
+          <span class="card-level">DSA</span>
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="card-skills-label">JavaScript · CSS Animations</span>
+        <a href="https://pooja-karkutla.github.io/final/" class="card-link">
+          View project
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrap">
+    <div>
+      <div class="section-tag reveal">Contact</div>
+      <h2 class="section-title reveal reveal-delay-1">Let's work<br>together</h2>
+      <p class="about-text reveal reveal-delay-2" style="margin-bottom:2.5rem">
+         Have a project opportunity or collaboration in mind? Feel free to connect. I am always open to learning, building, and exploring new opportunities.
+      </p>
+      <div class="contact-detail reveal reveal-delay-2">
+        <div class="contact-icon">📧</div>
+        <div>
+          <h4>EMAIL</h4>
+          <p>pooja.karkutla@email.com</p>
+        </div>
+      </div>
+      <div class="contact-detail reveal reveal-delay-3">
+        <div class="contact-icon">📍</div>
+        <div>
+          <h4>LOCATION</h4>
+          <p>Hyderabad, India</p>
+        </div>
+      </div>
+      <div class="contact-detail reveal reveal-delay-4">
+        <div class="contact-icon">🔗</div>
+        <div>
+          <h4>LINKEDIN</h4>
+          <p>linkedin.com/in/pooja-karkutla</p>
+        </div>
+      </div>
+    </div>
+    <form class="contact-form reveal reveal-delay-2"
+      action="https://formsubmit.co/pooja.karkutla@gmail.com"
+      method="POST">
+      <input type="hidden" name="_captcha" value="false">
+
+      <input type="hidden" name="_next" value="https://your-portfolio-link.com">
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" name="first_name" placeholder="John"/>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" name="last_name" placeholder="Doe"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" placeholder="john@example.com"/>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" name="subject" placeholder="Project inquiry"/>
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea name="message" rows="5" placeholder="Tell me about your project..."></textarea>
+      </div>
+      <button type="submit" class="btn-primary">Send Message</button>
+        <svg width="10" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="resume-wrap">
+
+    <div class="section-tag reveal" style="justify-content:center">
+      Resume
+    </div>
+
+    <h2 class="section-title reveal reveal-delay-1">
+      Education & Background
+    </h2>
+
+    <div class="resume-card reveal reveal-delay-2">
+
+      <p style="color:var(--text-mid);font-size:.95rem;margin-bottom:1.5rem">
+        A concise overview of my academic background and technical journey in software development and information technology.
+      </p>
+
+      <div style="padding-left:1.2rem;border-left:2.5px solid var(--accent2); margin-bottom:1.5rem">
+
+        <div style="font-size:.75rem;color:var(--text-light);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.2rem">
+          2024 – 2028
+        </div>
+
+        <div style="font-weight:600;font-size:1.05rem">
+          Bachelor of Technology — Information Technology
+        </div>
+
+        <div style="color:var(--text-mid);font-size:.9rem">
+          G. Narayanamma Institute of Technology and Science
+        </div>
+
+        <div style="color:var(--text-light);font-size:.85rem;margin-top:.4rem">
+          Focused on Data Structures, Web Development, and Artificial Intelligence.
+        </div>
+
+      </div>
+
+      <div style="padding-left:1.2rem;border-left:2.5px solid var(--accent2)">
+
+        <div style="font-size:.75rem;color:var(--text-light);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.2rem">
+          Relevant Interests
+        </div>
+
+        <div style="color:var(--text-mid);font-size:.9rem">
+          • AI & Machine Learning  
+          • Problem Solving & DSA  
+          • Building interactive UI/UX projects  
+        </div>
+
+      </div>
+
+    </div>
+
+    <a href="Pooja Karkutla.pdf"
+       
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+      </svg>
+
+      
+      <a href="resume/Pooja Karkutla.pdf" target="_blank" class="btn-primary">
+  View Resume
+</a>
+    </a>
+
+  </div>
+</section>
+<!-- FOOTER -->
+<footer>
+  <span>© 2026 Pooja Karkutla</span>
+  <div class="social-links">
+  <a href="https://www.linkedin.com/in/pooja-karkutla" target="_blank" rel="noopener noreferrer">
+    LinkedIn
+  </a>
+
+  <a href="https://github.com/Pooja-karkutla" target="_blank" rel="noopener noreferrer">
+    GitHub
+  </a>
+  </div>
+</footer>
+
+<script>
+  // ── Navbar scroll shadow ──
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // ── Scroll reveal ──
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); }
+    });
+  }, { threshold: 0.15 });
+  reveals.forEach(el => observer.observe(el));
+
+  // ── Sorting bar animation on card hover ──
+  const card = document.getElementById('sorting-card');
+  const bars = card.querySelectorAll('.bar');
+  const heights = [60,110,40,90,70,130,50];
+  let animInterval = null;
+
+  function shuffleAndAnimate() {
+    const shuffled = [...heights].sort(() => Math.random() - .5);
+    bars.forEach((b, i) => b.style.height = shuffled[i] + 'px');
+    setTimeout(() => {
+      const sorted = [...shuffled].sort((a,b) => a-b);
+      bars.forEach((b, i) => {
+        setTimeout(() => { b.style.height = sorted[i] + 'px'; }, i * 80);
+      });
+    }, 500);
+  }
+
+  card.addEventListener('mouseenter', () => {
+    shuffleAndAnimate();
+    animInterval = setInterval(shuffleAndAnimate, 2500);
+  });
+  card.addEventListener('mouseleave', () => {
+    clearInterval(animInterval);
+    bars.forEach((b, i) => b.style.height = heights[i] + 'px');
+  });
+
+  // ── Send message feedback ──
+  function handleSend(btn) {
+    btn.innerHTML = '✓ Message Sent!';
+    btn.style.background = 'var(--accent2)';
+    btn.disabled = true;
+    setTimeout(() => {
+      btn.innerHTML = '<svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Send Message';
+      btn.style.background = '';
+      btn.disabled = false;
+    }, 3000);
+  }
+</script>
+</body>
+</html>
